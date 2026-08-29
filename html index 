@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dangara Cricket Tournament</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f2f5f8;
+}
+
+header {
+  background: #0757c9;
+  color: white;
+  text-align: center;
+  padding: 25px 10px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+nav {
+  background: white;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 8px #ccc;
+}
+
+nav a {
+  color: #0757c9;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 8px;
+}
+
+section {
+  max-width: 900px;
+  margin: auto;
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px #ddd;
+}
+
+h2 {
+  color: #0757c9;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #0757c9;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.record {
+  background: #f7f9fc;
+  border-left: 5px solid #0757c9;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.delete {
+  background: #dc3545;
+  font-size: 14px;
+}
+
+footer {
+  background: #073b8c;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏏 Dangara Cricket Tournament</h1>
+  <p>👑 King of Dangara</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#add">Add Record</a>
+  <a href="#records">Records</a>
+</nav>
+
+<section id="home">
+  <div class="card">
+    <h2>🏆 Tournament</h2>
+    <p><b>Name:</b> Dangara Cricket Tournament</p>
+    <p><b>Team:</b> King of Dangara</p>
+  </div>
+</section>
+
+<section id="add">
+  <div class="card">
+
+    <h2>➕ Match Record जोड़ें</h2>
+
+    <input
+      type="text"
+      id="matchName"
+      placeholder="Match का नाम">
+
+    <input
+      type="text"
+      id="playerName"
+      placeholder="Player का नाम">
+
+    <input
+      type="number"
+      id="runs"
+      placeholder="Runs">
+
+    <input
+      type="number"
+      id="wickets"
+      placeholder="Wickets">
+
+    <button onclick="addRecord()">
+      🏏 Record जोड़ें
+    </button>
+
+  </div>
+</section>
+
+<section id="records">
+
+  <div class="card">
+
+    <h2>📊 Match Records</h2>
+
+    <div id="recordList">
+      अभी कोई रिकॉर्ड नहीं है।
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+  <p>🏏 Dangara Cricket Tournament</p>
+  <p>© 2026 King of Dangara</p>
+</footer>
+
+<script>
+
+let records =
+JSON.parse(localStorage.getItem("cricketRecords")) || [];
+
+
+function addRecord() {
+
+  let match =
+  document.getElementById("matchName").value.trim();
+
+  let player =
+  document.getElementById("playerName").value.trim();
+
+  let runs =
+  document.getElementById("runs").value || 0;
+
+  let wickets =
+  document.getElementById("wickets").value || 0;
+
+
+  if (match === "" || player === "") {
+    alert("कृपया Match और Player का नाम भरें।");
+    return;
+  }
+
+
+  records.push({
+    match: match,
+    player: player,
+    runs: runs,
+    wickets: wickets
+  });
+
+
+  localStorage.setItem(
+    "cricketRecords",
+    JSON.stringify(records)
+  );
+
+
+  document.getElementById("matchName").value = "";
+  document.getElementById("playerName").value = "";
+  document.getElementById("runs").value = "";
+  document.getElementById("wickets").value = "";
+
+
+  showRecords();
+
+  alert("✅ Record जोड़ दिया गया!");
+}
+
+
+function showRecords() {
+
+  let list =
+  document.getElementById("recordList");
+
+
+  if (records.length === 0) {
+    list.innerHTML = "अभी कोई रिकॉर्ड नहीं है।";
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  records.forEach(function(record, index) {
+
+    list.innerHTML += `
+
+      <div class="record">
+
+        <h3>🏆 ${record.match}</h3>
+
+        <p>
+          👤 <b>Player:</b> ${record.player}
+        </p>
+
+        <p>
+          🏏 <b>Runs:</b> ${record.runs}
+        </p>
+
+        <p>
+          🎯 <b>Wickets:</b> ${record.wickets}
+        </p>
+
+        <button
+          class="delete"
+          onclick="deleteRecord(${index})">
+          🗑️ Delete
+        </button>
+
+      </div>
+
+    `;
+
+  });
+}
+
+
+function deleteRecord(index) {
+
+  if (confirm("क्या यह रिकॉर्ड हटाना है?")) {
+
+    records.splice(index, 1);
+
+    localStorage.setItem(
+      "cricketRecords",
+      JSON.stringify(records)
+    );
+
+    showRecords();
+  }
+}
+
+
+showRecords();
+
+</script>
+
+</body>
+</html>
