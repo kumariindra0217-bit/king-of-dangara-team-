@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dangara Cricket Tournament</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f2f5f8;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0b5ed7, #073b8c);
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 16px;
+    }
+
+    nav {
+      background: white;
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px #ccc;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #0b5ed7;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px #ddd;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #073b8c;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #0b5ed7;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #073b8c;
+    }
+
+    .player {
+      background: #f7f9fc;
+      border-left: 5px solid #0b5ed7;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+
+    .player strong {
+      font-size: 19px;
+    }
+
+    .stats {
+      margin-top: 7px;
+      color: #555;
+    }
+
+    .delete {
+      background: #dc3545;
+      font-size: 14px;
+      padding: 8px;
+    }
+
+    footer {
+      background: #073b8c;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .notice {
+      background: #fff3cd;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      color: #664d03;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🏏 Dangara Cricket Tournament</h1>
+    <p>King of Dangara 🏆</p>
+  </header>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#register">Player Registration</a>
+    <a href="#players">Players</a>
+  </nav>
+
+  <!-- HOME -->
+  <section id="home">
+
+    <div class="card">
+      <h2>🏆 Tournament Information</h2>
+
+      <p><b>Tournament:</b> Dangara Cricket Tournament</p>
+      <p><b>Team:</b> King of Dangara</p>
+      <p><b>Game:</b> Cricket</p>
+
+      <div class="notice">
+        📢 सभी खिलाड़ी अपना नाम और जानकारी Registration Form में भर सकते हैं।
+      </div>
+    </div>
+
+  </section>
+
+  <!-- REGISTRATION -->
+  <section id="register">
+
+    <div class="card">
+
+      <h2>📝 Player Registration</h2>
+
+      <input
+        type="text"
+        id="playerName"
+        placeholder="Player का नाम">
+
+      <input
+        type="text"
+        id="teamName"
+        placeholder="Team का नाम">
+
+      <input
+        type="number"
+        id="runs"
+        placeholder="Runs">
+
+      <input
+        type="number"
+        id="wickets"
+        placeholder="Wickets">
+
+      <button onclick="addPlayer()">
+        ➕ Player जोड़ें
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- PLAYER LIST -->
+  <section id="players">
+
+    <div class="card">
+
+      <h2>👥 Player List</h2>
+
+      <div id="playerList">
+        <p>अभी कोई player नहीं जोड़ा गया।</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    <p>🏏 Dangara Cricket Tournament</p>
+    <p>© 2026 King of Dangara</p>
+  </footer>
+
+
+  <script>
+
+    // पहले से सेव players निकालना
+    let players = JSON.parse(
+      localStorage.getItem("dangaraPlayers")
+    ) || [];
+
+
+    // Player जोड़ना
+    function addPlayer() {
+
+      const name =
+        document.getElementById("playerName").value.trim();
+
+      const team =
+        document.getElementById("teamName").value.trim();
+
+      const runs =
+        document.getElementById("runs").value || 0;
+
+      const wickets =
+        document.getElementById("wickets").value || 0;
+
+
+      if (name === "") {
+        alert("कृपया Player का नाम लिखें।");
+        return;
+      }
+
+
+      const player = {
+        name: name,
+        team: team || "Team नहीं दी गई",
+        runs: runs,
+        wickets: wickets
+      };
+
+
+      players.push(player);
+
+
+      localStorage.setItem(
+        "dangaraPlayers",
+        JSON.stringify(players)
+      );
+
+
+      document.getElementById("playerName").value = "";
+      document.getElementById("teamName").value = "";
+      document.getElementById("runs").value = "";
+      document.getElementById("wickets").value = "";
+
+
+      displayPlayers();
+
+      alert("✅ Player सफलतापूर्वक जोड़ दिया गया!");
+    }
+
+
+    // Players दिखाना
+    function displayPlayers() {
+
+      const list =
+        document.getElementById("playerList");
+
+
+      if (players.length === 0) {
+
+        list.innerHTML =
+          "<p>अभी कोई player नहीं जोड़ा गया।</p>";
+
+        return;
+      }
+
+
+      list.innerHTML = "";
+
+
+      players.forEach((player, index) => {
+
+        list.innerHTML += `
+
+          <div class="player">
+
+            <strong>🏏 ${player.name}</strong>
+
+            <div class="stats">
+              🏆 Team: ${player.team}<br>
+              🏏 Runs: ${player.runs}<br>
+              🎯 Wickets: ${player.wickets}
+            </div>
+
+            <button
+              class="delete"
+              onclick="deletePlayer(${index})">
+
+              🗑️ Delete
+
+            </button>
+
+          </div>
+
+        `;
+
+      });
+
+    }
+
+
+    // Player हटाना
+    function deletePlayer(index) {
+
+      if (
+        confirm("क्या आप इस player को हटाना चाहते हैं?")
+      ) {
+
+        players.splice(index, 1);
+
+        localStorage.setItem(
+          "dangaraPlayers",
+          JSON.stringify(players)
+        );
+
+        displayPlayers();
+      }
+
+    }
+
+
+    // Page खुलने पर players दिखाएँ
+    displayPlayers();
+
+  </script>
+
+</body>
+</html>
